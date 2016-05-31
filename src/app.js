@@ -1,1 +1,1 @@
-require('./components/comment.box/comment.box')
+require('./components/CommentBox');
