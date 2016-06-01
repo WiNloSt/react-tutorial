@@ -10,12 +10,15 @@ class CommentBox extends React.Component {
 		return (
 			<div className='commentBox'>
 				<h1>Comments</h1>
-				<CommentList />
+				<CommentList data={this.props.data}/>
 				<CommentForm />
 			</div>
 		)
 	}
 }
-
-const rootNode = $("#root")[0];
-ReactDOM.render(<CommentBox/>, rootNode);
+const data = [
+	{id: 1, author: 'Pete Hunt', text: 'This is one comment'},
+	{id: 2, author: 'Jordan Walke', text: 'This is *another* comment'}
+]
+const rootFromHjsWebpack = $("#root")[0];
+ReactDOM.render(<CommentBox data={data}/>, rootFromHjsWebpack);
