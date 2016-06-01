@@ -6,19 +6,36 @@ import CommentList from './CommentList';
 import CommentForm from './CommentForm';
 
 class CommentBox extends React.Component {
+	state = {
+		data: []
+	}
+
+	loadCommentsFromServer = () => {
+		$.ajax({
+			url: this.props.url,
+			dataType: 'json',
+			cache: false,
+			success: data => this.setState({data: data}),
+			error: (xhr, status, err) => console.error(this.props.url, status, err.toString())
+		})
+	}
+
+	componentDidMount() {
+		this.loadCommentsFromServer();
+		setInterval(this.loadCommentsFromServer, this.props.pollInterval);
+	}
+
 	render() {
+		console.log('state', this.state)
 		return (
 			<div className='commentBox'>
 				<h1>Comments</h1>
-				<CommentList data={this.props.data}/>
+				<CommentList data={this.state.data}/>
 				<CommentForm />
 			</div>
 		)
 	}
 }
-const data = [
-	{id: 1, author: 'Pete Hunt', text: 'This is one comment'},
-	{id: 2, author: 'Jordan Walke', text: 'This is *another* comment'}
-]
+
 const rootFromHjsWebpack = $("#root")[0];
-ReactDOM.render(<CommentBox data={data}/>, rootFromHjsWebpack);
+ReactDOM.render(<CommentBox url='/comments.json' pollInterval={2000}/>, rootFromHjsWebpack);

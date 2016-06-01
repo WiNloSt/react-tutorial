@@ -1,11 +1,18 @@
 import React, { PropTypes } from 'react';
 
 class CommentForm extends React.Component {
+  state = {
+    author: '',
+  }
+
+
   render() {
     return (
-      <div className='commentForm'>
-        Hello, world! I am a CommnentForm.
-      </div>
+      <form className='commentForm'>
+        <input placeholder='Your name' />
+        <input placeholder='Say something...' />
+        <button type='submit'>Post</button>
+      </form>
     )
   }
 }
