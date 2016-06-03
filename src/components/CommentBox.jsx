@@ -15,9 +15,32 @@ class CommentBox extends React.Component {
 			url: this.props.url,
 			dataType: 'json',
 			cache: false,
-			success: data => this.setState({data: data}),
+			success: data => this.setState({data}),
 			error: (xhr, status, err) => console.error(this.props.url, status, err.toString())
 		})
+	}
+
+	handleCommentSubmit = comment => {
+		console.log('new comment comming')
+		const comments = this.state.data
+		comment.id = Date.now();
+		const newComments = comments.concat(comment);
+		this.setState({
+			data: newComments
+		})
+		$.ajax({
+			url: this.props.url,
+			dataType: 'json',
+			type: 'POST',
+			data: comment
+		})
+		.then(data => this.setState({data}))
+		.fail((xhr, status, err) => {
+			this.setState({
+				data: comments
+			})
+			console.error(this.props.url, status, err.toString())
+		});
 	}
 
 	componentDidMount() {
@@ -26,12 +49,11 @@ class CommentBox extends React.Component {
 	}
 
 	render() {
-		console.log('state', this.state)
 		return (
 			<div className='commentBox'>
 				<h1>Comments</h1>
 				<CommentList data={this.state.data}/>
-				<CommentForm />
+				<CommentForm onCommentSubmit={this.handleCommentSubmit}/>
 			</div>
 		)
 	}
